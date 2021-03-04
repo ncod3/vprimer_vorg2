@@ -13,7 +13,8 @@ import vprimer.utils as utl
 
 from Bio import Restriction
 from Bio.Seq import Seq
-# error
+
+# biopython <= 1.76 for IUPACAmbiguousDNA()
 from Bio.Alphabet.IUPAC import IUPACAmbiguousDNA
 
 from vprimer.product import Product

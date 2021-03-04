@@ -31,11 +31,12 @@ blastn
 ~~~
 
 ## Installation
+
 ~~~
 if you have not yet made vprimer environment on conda, you can make it.
 
-$ conda create -n run_vprimer python=3.75
-$ source activate run_vprimer
+$ conda create -n run_vprimer python=3.7.5
+$ conda activate run_vprimer
 
 We recommend that you start by uninstalling vprimer as it will be updated frequently.
 
@@ -50,17 +51,21 @@ $ (run_vprimer) pip install git+https://github.com/ncod3/vprimer
 
 To run on conda, you need to install the following packages.
 
-$ (run_vprimer) conda install -c anaconda pandas
-$ (run_vprimer) conda install -c bioconda vcfpy
-$ (run_vprimer) conda install -c bioconda pysam 
-$ (run_vprimer) conda install -c anaconda joblib 
-$ (run_vprimer) conda install -c anaconda biopython==1.76
+(run_vprimer)$ conda install -c anaconda pandas
+(run_vprimer)$ conda install -c bioconda vcfpy
+(run_vprimer)$ conda install -c bioconda pysam 
+(run_vprimer)$ conda install -c anaconda joblib 
+(run_vprimer)$ conda install -c anaconda biopython==1.76
 
-$ (run_vprimer) conda install -c bioconda samtools==1.9
-$ (run_vprimer) conda install -c bioconda bcftools
-$ (run_vprimer) conda install -c bioconda tabix
-$ (run_vprimer) conda install -c bioconda primer3
-$ (run_vprimer) conda install -c bioconda blast
+(run_vprimer)$ conda install -c bioconda samtools==1.9
+(run_vprimer)$ conda install -c bioconda bcftools
+(run_vprimer)$ conda install -c bioconda tabix
+(run_vprimer)$ conda install -c bioconda primer3
+(run_vprimer)$ conda install -c bioconda blast
+
+You may be able to write packages together in the conda install command.
+
+(run_vprimer)$ conda install pandas vcfpy pysam joblib biopython==1.76 samtools==1.9 bcftools tabix primer3 blast
 
 ~~~
 

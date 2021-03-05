@@ -54,10 +54,9 @@ class Param(object):
             version='$(prog)s {}'.format(__version__))
 
         #---------------------------------------------------------
-        parser.add_argument('-w', '--without_group', action='store',
+        parser.add_argument('-g', '--show_genotype', action='store',
             type=str, metavar='',
-            help="Evaluate markers on all valid variants without" +\
-                " specifying a group")
+            help="show genotype for all variants")
 
         #---------------------------------------------------------
         # -o --out_dir

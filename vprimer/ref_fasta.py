@@ -258,6 +258,8 @@ class RefFasta(object):
         '''
         if glv.conf.show_fasta == True:
             log.info("only show_fasta mode, exit.")
+            log.info("program finished {}\n".format(
+                utl.elapsed_time(time.time(), glv.now_epochtime)))
             sys.exit(1)
 
         return ref_fasta_chrom_dict_list, \

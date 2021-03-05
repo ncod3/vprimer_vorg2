@@ -209,13 +209,21 @@ class ConfDistinG(object):
 
             err_mes = ""
 
+            # for show_genotype "all"
             if field_cnt == 1:
-                err_mes = "You cannot define just only the region name."
+                region_name = field[0]
+                if not self._is_chrom_name(region_name):
+                    err_mes = "You cannot define just only the region name "
+                    err_mes += " except chromosome name."
+                else:
+                    field.append(region_name)
+                    field.append("all")
+                    field_cnt = 3
 
-            else:
+            if err_mes == "":
                 if field_cnt == 2:
-                    # Blank has the same meaning as 'whole'
-                    field.append("whole")
+                    # Blank has the same meaning as 'all'
+                    field.append("all")
                     field_cnt += 1
 
                 if field_cnt == 3:
@@ -234,7 +242,7 @@ class ConfDistinG(object):
                         err_mes += "is incorrect."
 
                     # 2) rg_str
-                    elif rg_str == 'whole':
+                    elif rg_str == 'all':
                         region_str, start, end, length = \
                             self._get_chrom_info(chrom_name)
                         rg_str = "{}-{}".format(start, end)
@@ -480,12 +488,12 @@ class ConfDistinG(object):
             err_mes = ""
             # 4. check region_name
             if region_names == "":
-                region_names = 'whole'
+                region_names = 'all'
 
-            # If the group name is 'whole', connect the chromosome names
+            # If the group name is 'all', connect the chromosome names
             # with '+' 
 
-            if region_names == 'whole':
+            if region_names == 'all':
                 region_names = '+'.join(self.ref_fasta_chrom_list)
             else:
                 # The region name is a variable or chromosome name

@@ -46,6 +46,16 @@ class VPrimer(object):
     def run(self):
 
         self.prepare()
+
+        #self.variant.print_allele_int()
+        #self.variant.print_all_allele_int()
+        #glv.conf.get_vcf_pos_info()
+        if glv.conf.show_genotype != "no":
+            self.variant.print_allele()
+            log.info("program finished {}\n".format(
+                utl.elapsed_time(time.time(), glv.now_epochtime)))
+            sys.exit(1)
+
         # variant
         self.variant.pick_variant()
         # marker
@@ -66,12 +76,6 @@ class VPrimer(object):
 
         # read reference into global environment
         glv.ref = glv.ref.prepare_ref()
-
-        #self.variant.print_allele_int()
-        #self.variant.print_all_allele_int()
-
-        #glv.conf.get_vcf_pos_info()
-        #sys.exit(1)
 
         # setup all variables
         glv.conf.setup_variables()

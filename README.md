@@ -57,7 +57,7 @@ To run on conda, you need to install the following packages.
 (run_vprimer)$ conda install -c anaconda joblib 
 (run_vprimer)$ conda install -c anaconda biopython==1.76
 
-(run_vprimer)$ conda install -c bioconda samtools==1.9
+(run_vprimer)$ conda install -c bioconda samtools
 (run_vprimer)$ conda install -c bioconda bcftools
 (run_vprimer)$ conda install -c bioconda tabix
 (run_vprimer)$ conda install -c bioconda primer3
@@ -65,7 +65,7 @@ To run on conda, you need to install the following packages.
 
 You may be able to write packages together in the conda install command.
 
-(run_vprimer)$ conda install pandas vcfpy pysam joblib biopython==1.76 samtools==1.9 bcftools tabix primer3 blast
+(run_vprimer)$ conda install pandas vcfpy pysam joblib biopython==1.76 samtools bcftools tabix primer3 blast
 
 ~~~
 

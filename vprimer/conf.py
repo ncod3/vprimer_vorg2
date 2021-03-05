@@ -39,11 +39,11 @@ class ConfBase(object):
 
         # ----------------------------------------------------------
         self.conf_dict = {
+            # show_genotype  no / gt / int
+            'show_genotype':{'dtype': 'str',   'default': 'no'},
+
             # debug
             'analyse_caps': {'dtype': 'bool', 'default': 'False'},
-
-            # without_group
-            'without_group':{'dtype': 'str',   'default': 'no'},
 
             # ini, param, ini, easy
             'ini_version':  {'dtype': 'str',    'default': glv.ini_version},
@@ -114,8 +114,8 @@ class ConfBase(object):
         # for debug
         self.analyse_caps = False
 
-        # without group ---------------------------------------
-        self.without_group = ""         # ---- INI
+        # show_genotype ---------------------------------------
+        self.show_genotype = ""         # ---- INI
 
         # ini file --------------------------------------------
         self.user_ini_file = ""         # ---- INI
@@ -467,8 +467,15 @@ class ConfBase(object):
         self.out_bak_dir_path = "{}/{}".format(self.out_dir_path, "bak")
 
         #pprint.pprint(self.conf_dict)
-        # INI without_group
-        self.without_group = self._value_choice('without_group')
+        # INI show_genotype
+        self.show_genotype = self._value_choice('show_genotype')
+        if not self.show_genotype in ['no', 'str', 'int']:
+            err_mes = "show_genotype is selected from one of "
+            err_mes += "'no', 'str', 'int'."
+            log.error("{} exit.".format(err_mes))
+            log.error("show_genotype={}".format(self.show_genotype))
+            sys.exit(1)
+
 
         # ini_file --------------------------------------------
         # INI
@@ -490,6 +497,14 @@ class ConfBase(object):
 
         # thread ----------------------------------------------
         self.use_joblib_threading = self._value_choice('use_joblib_threading')
+
+        if not self.use_joblib_threading in ['yes', 'no']:
+            err_mes = "use_joblib_threading is selected from one of "
+            err_mes = "show_genotype is either yes or no."
+            log.error("{} exit.".format(err_mes))
+            log.error("use_joblib_threading={}".format(
+                self.use_joblib_threading))
+            sys.exit(1)
 
         # thread adjust
         self.parallel, \
@@ -538,6 +553,8 @@ class ConfBase(object):
         # Because it stops at show_fasta
         if self.show_fasta != True and self.show_samples == True:
             log.info("only show_samples mode, exit.")
+            log.info("program finished {}\n".format(
+                utl.elapsed_time(time.time(), glv.now_epochtime)))
             sys.exit(1)
 
 
@@ -595,16 +612,15 @@ class ConfBase(object):
         self.group_members_str = self.set_group_members_str()
         self.distinguish_groups_str = self.set_distinguish_groups_str()
 
-#        if self.regions_str == "":
-#            err_mes = "regions={} or target are required. exit.".format(
-#                self.regions_str)
-#            log.error(err_mes)
-#            sys.exit(1)
-
 
     def setup_variables(self):
         '''
         '''
+
+        # setup only regions and members
+        if self.show_genotype != "no":
+            self._setup_genotype_variables()
+
         # Satisfy three structural variables
         #   1) regions_dict
         #   2) distinguish_groups_list
@@ -615,7 +631,7 @@ class ConfBase(object):
 
         #   Easy mode lacks the region name, so make up for it here.
         if '<EASY_MODE>' in self.regions_str:
-            # <EASY_MODE>chrom_01:1-200000,chrom_02,chrom_03:whole
+            # <EASY_MODE>chrom_01:1-200000,chrom_02,chrom_03:all
             regions_str = ""
             rg_cnt = 1
             for region in self.regions_str.split(','):
@@ -679,10 +695,12 @@ class ConfBase(object):
                 self.distinguish_groups_str)
 
         # 3.2) make distinguish_groups_list from distinguish_groups_str ....
-        self.distinguish_groups_str, \
-        self.distinguish_groups_list \
-            = self.set_distinguish_groups_list(
-                self.distinguish_groups_str)
+        # Avoid checking when show_genotype
+        if self.show_genotype == "no":
+            self.distinguish_groups_str, \
+            self.distinguish_groups_list \
+                = self.set_distinguish_groups_list(
+                    self.distinguish_groups_str)
 
         self._set_chosen_value('distinguish_groups',
             self.distinguish_groups_str)
@@ -743,6 +761,42 @@ class ConfBase(object):
                 log.error("{}".format(
                     ", ".join(glv.outlist.outf_prefix.keys())))
                 sys.exit(1)
+
+
+    def _setup_genotype_variables(self):
+        '''
+        '''
+
+        if self.regions_str == "all":
+            self.regions_str = "{}".format(
+                ",".join(self.ref_fasta_chrom_list))
+
+        if self.group_members_str == "all":
+            self.group_members_str = "all:{}".format(
+                ",".join(self.vcf_sample_nickname_list))
+
+        '''
+        print("regions_str={}".format(
+            self.regions_str))
+        print("group_members_str={}".format(
+            self.group_members_str))
+        print("distinguish_groups_str={}".format(
+            self.distinguish_groups_str))
+
+
+        print("region_name_list={}".format(
+            self.region_name_list))
+        print("group_name_list={}".format(
+            self.group_name_list))
+
+        print("regions_dict={}".format(
+            self.regions_dict))
+        print("group_members_dict={}".format(
+            self.group_members_dict))
+        print("distinguish_groups_list={}".format(
+            self.distinguish_groups_list))
+        #sys.exit(1)
+        '''
 
         
     def _check_progress_stop(self):

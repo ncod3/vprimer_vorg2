@@ -415,7 +415,7 @@ class AlleleSelect(object):
         ./. -> 0, 0/1 -> 12, 1/1 -> 22, 1/3 -> 24
         '''
 
-        #mode int, allele
+        #mode int, str
         #print(raw_gt)
 
         allele_int_10 = 0 
@@ -439,7 +439,7 @@ class AlleleSelect(object):
         allele_int = int(allele_int_10) * 10 + int(allele_int_1)
 
         ret = allele_int
-        if mode == "allele":
+        if mode == "str":
             ret = "{}/{}".format(al_10, al_1)
 
         return ret

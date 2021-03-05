@@ -85,7 +85,10 @@ class ConfCurrSet(object):
         log.info("self.distinguish_groups_list=\n{}".format(
             pprint.pformat(self.distinguish_groups_list)))
 
+
     def _convert_setting_ini(self, current_setting_ini):
+        '''
+        '''
 
         oline = list()
 

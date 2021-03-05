@@ -21,7 +21,7 @@ ini_version = "20210201"
 
 ##########################################
 # for region
-GENOME_WHOLE = 'whole'
+GENOME_ALL = 'all'
 
 ##########################################
 # allele status

@@ -266,6 +266,95 @@ class Variant(object):
         return skip
 
 
+    def print_allele(self):
+
+        ''' When show_genotype is specified, the genotype of the specified
+        regions and members are output to a file.
+        '''
+
+        proc_name = "genotype"
+        log.info("-------------------------------")
+        log.info("Start processing {}\n".format(proc_name))
+
+        # header
+        header = list()
+        header += ["CHROM", "POS", "REF", "ALT", "Rlen", "Alen", "diff"]
+        header += glv.conf.group_members_dict['all']
+
+        # reader
+        reader = vcfpy.Reader.from_path(glv.conf.vcf_file_path)
+
+        total_cnt = len(glv.conf.region_name_list)
+
+        # Save to file for each region
+        for proc_cnt, region_name in enumerate(glv.conf.region_name_list, 1):
+
+            region = glv.conf.regions_dict[region_name]['reg']
+
+            # Create a list of fullname for the specified members
+            sample_fullname_list = list()
+            for nickname in glv.conf.group_members_dict['all']:
+                sample_fullname_list.append(utl.get_fullname(nickname))
+
+            # if group priority
+            #sample_fullname_list = \
+            #    utl.get_sample_list_from_groupname(
+            #        group_list, "fullname")
+
+            # out file name
+            outf_pref = "005_genotype"
+            basename = "{}~{}~{}".format(
+                outf_pref, region_name, glv.conf.show_genotype)
+            out_file_path = "{}/{}.txt".format(
+                glv.conf.out_dir_path, basename)
+
+            # backup
+            utl.save_to_tmpfile(out_file_path)
+
+            log.info("")
+            log.info("{} / {}, {}({}) > {}".format(
+                proc_cnt, total_cnt, region_name, region, out_file_path ))
+
+            start = time.time()
+            with open(out_file_path, mode='w') as f:
+
+                f.write("{}\n".format('\t'.join(map(str, header))))
+
+                vcf_ittr = reader.fetch(region)
+                for record in vcf_ittr:
+
+                    # Main informations
+                    line = [record.CHROM, record.POS, record.REF]
+                    alt_list = [alt.value for alt in record.ALT]
+                    line += [",".join(alt_list)]
+
+                    # variant length and diff
+                    len_ref = len(record.REF)
+                    lens_alt_list = list()
+                    for alt in alt_list:
+                        lens_alt_list.append(len(alt))
+
+                    diff_len = abs(len_ref - lens_alt_list[0])
+                    lens_alt = ",".join(map(str, lens_alt_list))
+
+                    line += [len_ref]
+                    line += [lens_alt]
+                    line += [diff_len]
+
+                    line += [AlleleSelect.allele_int(
+                        "{}/{}".format(
+                            record.call_for_sample[fn].gt_alleles[0],
+                            record.call_for_sample[fn].gt_alleles[1]
+                        ), glv.conf.show_genotype
+                        ) for fn in sample_fullname_list]
+
+                    f.write("{}\n".format('\t'.join(map(str, line))))
+
+            log.info("genotype {} > {}.txt\n".format(
+                utl.elapsed_time(time.time(), start),
+                out_file_path))
+
+
     def print_all_allele_int(self):
         '''
         '''

@@ -23,7 +23,7 @@ vcfpy
 joblib
 Bio (==1.76)
 
-samtools (==1.9)
+samtools
 bcftools
 tabix
 primer3

@@ -278,7 +278,7 @@ class Variant(object):
 
         # header
         header = list()
-        header += ["CHROM", "POS", "REF", "ALT", "Rlen", "Alen", "diff"]
+        header += ["CHROM", "POS", "Rlen", "Alen", "diff", "REF", "ALT"]
         header += glv.conf.group_members_dict['all']
 
         # reader
@@ -324,9 +324,9 @@ class Variant(object):
                 for record in vcf_ittr:
 
                     # Main informations
-                    line = [record.CHROM, record.POS, record.REF]
+                    line = [record.CHROM, record.POS]
+
                     alt_list = [alt.value for alt in record.ALT]
-                    line += [",".join(alt_list)]
 
                     # variant length and diff
                     len_ref = len(record.REF)
@@ -340,6 +340,9 @@ class Variant(object):
                     line += [len_ref]
                     line += [lens_alt]
                     line += [diff_len]
+
+                    line += [record.REF]
+                    line += [",".join(alt_list)]
 
                     line += [AlleleSelect.allele_int(
                         "{}/{}".format(
@@ -355,70 +358,68 @@ class Variant(object):
                 out_file_path))
 
 
-    def print_all_allele_int(self):
-        '''
-        '''
-
-        header = list()
-        header += ["CHROM", "POS", "REF", "ALT"]
-        header += glv.conf.vcf_sample_nickname_list
-        #print("#{}".format("\t".join(header)))
-
-        reader = vcfpy.Reader.from_path(glv.conf.vcf_file_path)
-
-        # all chromosome region
-        for region in glv.conf.ref_fasta_chrom_region_list:
-
-            # for members full name
-            glv.conf.vcf_sample_fullname_list
-
-            vcf_ittr = reader.fetch(region)
-            for record in vcf_ittr:
-
-                line = [record.CHROM, record.POS, record.REF]
-                alt_list = [alt.value for alt in record.ALT]
-                line += [",".join(alt_list)]
-                line += [AlleleSelect.allele_int("{}/{}".format(
-                    record.call_for_sample[fn].gt_alleles[0],
-                    record.call_for_sample[fn].gt_alleles[1]
-                    )) for fn in glv.conf.vcf_sample_fullname_list]
-
-                #print('\t'.join(map(str, line)))
-
-
-    def print_allele_int(self):
-        '''
-        '''
-
-        header = list()
-        header += ["CHROM", "POS", "REF", "ALT"]
-        header += glv.conf.vcf_sample_nickname_list
-        #print("#{}".format("\t".join(header)))
-
-        reader = vcfpy.Reader.from_path(glv.conf.vcf_file_path)
-        for distin_dict in glv.outlist.distin_files:
-
-            # for region
-            region_name = distin_dict['region']
-            region = glv.conf.regions_dict[region_name]['reg']
-
-            # for members full name
-            group_list = [distin_dict[0], distin_dict[1]]
-            sample_fullname_list = \
-                utl.get_sample_list_from_groupname(
-                    group_list, "fullname")
-
-            vcf_ittr = reader.fetch(region)
-            for record in vcf_ittr:
-
-                line = [record.CHROM, record.POS, record.REF]
-                alt_list = [alt.value for alt in record.ALT]
-                line += [",".join(alt_list)]
-                line += [AlleleSelect.allele_int("{}/{}".format(
-                    record.call_for_sample[fn].gt_alleles[0],
-                    record.call_for_sample[fn].gt_alleles[1]
-                    )) for fn in sample_fullname_list]
-
-                #print('\t'.join(map(str, line)))
-
-
+#     def print_all_allele_int(self):
+#         '''
+#         '''
+# 
+#         header = list()
+#         header += ["CHROM", "POS", "REF", "ALT"]
+#         header += glv.conf.vcf_sample_nickname_list
+#         #print("#{}".format("\t".join(header)))
+# 
+#         reader = vcfpy.Reader.from_path(glv.conf.vcf_file_path)
+# 
+#         # all chromosome region
+#         for region in glv.conf.ref_fasta_chrom_region_list:
+# 
+#             # for members full name
+#             glv.conf.vcf_sample_fullname_list
+# 
+#             vcf_ittr = reader.fetch(region)
+#             for record in vcf_ittr:
+# 
+#                 line = [record.CHROM, record.POS, record.REF]
+#                 alt_list = [alt.value for alt in record.ALT]
+#                 line += [",".join(alt_list)]
+#                 line += [AlleleSelect.allele_int("{}/{}".format(
+#                     record.call_for_sample[fn].gt_alleles[0],
+#                     record.call_for_sample[fn].gt_alleles[1]
+#                     )) for fn in glv.conf.vcf_sample_fullname_list]
+# 
+#                 #print('\t'.join(map(str, line)))
+# 
+# 
+#     def print_allele_int(self):
+#         '''
+#         '''
+# 
+#         header = list()
+#         header += ["CHROM", "POS", "REF", "ALT"]
+#         header += glv.conf.vcf_sample_nickname_list
+#         #print("#{}".format("\t".join(header)))
+# 
+#         reader = vcfpy.Reader.from_path(glv.conf.vcf_file_path)
+#         for distin_dict in glv.outlist.distin_files:
+# 
+#             # for region
+#             region_name = distin_dict['region']
+#             region = glv.conf.regions_dict[region_name]['reg']
+# 
+#             # for members full name
+#             group_list = [distin_dict[0], distin_dict[1]]
+#             sample_fullname_list = \
+#                 utl.get_sample_list_from_groupname(
+#                     group_list, "fullname")
+# 
+#             vcf_ittr = reader.fetch(region)
+#             for record in vcf_ittr:
+# 
+#                 line = [record.CHROM, record.POS, record.REF]
+#                 alt_list = [alt.value for alt in record.ALT]
+#                 line += [",".join(alt_list)]
+#                 line += [AlleleSelect.allele_int("{}/{}".format(
+#                     record.call_for_sample[fn].gt_alleles[0],
+#                     record.call_for_sample[fn].gt_alleles[1]
+#                     )) for fn in sample_fullname_list]
+# 
+#                 #print('\t'.join(map(str, line)))

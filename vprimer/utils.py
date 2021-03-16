@@ -138,8 +138,15 @@ def save_to_tmpfile(file_path, can_log=True, copy_mod=False):
             glv.conf.out_bak_dir_path, basename_file)
 
         ret = True
-        new_file_path = "{}.{}.bak".format(
-            file_bak_path, glv.now_datetime_str)
+        new_file_path = "{}/{}.{}".format(
+            glv.conf.out_bak_dir_path, glv.now_datetime_str, basename_file)
+
+        #print(file_path)
+        #print(dirname_file)
+        #print("basename={}".format(basename_file))
+        #print(file_bak_path)
+        #print(new_file_path)
+        #sys.exit(1)
 
         mode = "mv"
         if copy_mod == True:

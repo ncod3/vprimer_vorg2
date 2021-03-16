@@ -410,39 +410,87 @@ class AlleleSelect(object):
 
 
     @classmethod
-    def allele_int(cls, raw_gt, mode):
-        '''  convert allele GT to integer
-        ./. -> 0, 0/1 -> 12, 1/1 -> 22, 1/3 -> 24
+    def allele_convert(cls, raw_gt, mode):
+        '''
+            raw_gt: ./.  0/0  0/1 ....
         '''
 
-        #mode int, str
-        #print(raw_gt)
+        ret = ""
 
-        allele_int_10 = 0 
-        allele_int_1 = 0
+        # separate into 1st and 2nd allele
+        al_1st_str, al_2nd_str = raw_gt.split("/")
 
-        allele_int = 0
+        if al_1st_str == "None":
+            al_1st_str = "."
+            al_2nd_str = "."
 
-        al_10, al_1 = raw_gt.split("/")
+        if mode == "int":
+            if al_1st_str == ".":
+                al_int_10 = 0
+                al_int_01 = 0
+            else:
+                # convert for index int
+                al_1st_no = int(al_1st_str)
+                al_2nd_no = int(al_2nd_str)
 
-        # for allele_int
-        if al_10 == "." or al_10 == "None":
-            al_10 = "."
-        else:
-            allele_int_10 = int(al_10) + 1
+                al_int_10 = (al_1st_no + 1) * 10
+                al_int_01 = al_2nd_no + 1
 
-        if al_1 == "." or al_1 == "None":
-            al_1 = "."
-        else:
-            allele_int_1 = int(al_1) + 1
+            ret = al_int_10 + al_int_01
 
-        allele_int = int(allele_int_10) * 10 + int(allele_int_1)
+        elif mode == "ab":
+            if al_1st_str == ".":
+                al_1st_ab = al_1st_str
+                al_2nd_ab = al_2nd_str
+            else:
+                abcd = ["a", "b", "c", "d"]
+                al_1st_no = int(al_1st_str)
+                al_2nd_no = int(al_2nd_str)
+                al_1st_ab = abcd[al_1st_no]
+                al_2nd_ab = abcd[al_2nd_no]
 
-        ret = allele_int
-        if mode == "str":
-            ret = "{}/{}".format(al_10, al_1)
+            ret = "{}{}".format(al_1st_ab, al_2nd_ab)
+
+        else: # gt
+            ret = "{}/{}".format(al_1st_str, al_2nd_str)
 
         return ret
+
+
+#    @classmethod
+#    def allele_int(cls, raw_gt, mode):
+#        '''  convert allele GT to integer
+#        ./. -> 0, 0/1 -> 12, 1/1 -> 22, 1/3 -> 24
+#        '''
+#
+#        #mode int, str
+#        #print(raw_gt)
+#
+#        allele_int_10 = 0 
+#        allele_int_1 = 0
+#
+#        allele_int = 0
+#
+#        al_10, al_1 = raw_gt.split("/")
+#
+#        # for allele_int
+#        if al_10 == "." or al_10 == "None":
+#            al_10 = "."
+#        else:
+#            allele_int_10 = int(al_10) + 1
+#
+#        if al_1 == "." or al_1 == "None":
+#            al_1 = "."
+#        else:
+#            allele_int_1 = int(al_1) + 1
+#
+#        allele_int = int(allele_int_10) * 10 + int(allele_int_1)
+#
+#        ret = allele_int
+#        if mode == "gt":
+#            ret = "{}/{}".format(al_10, al_1)
+#
+#        return ret
 
 
     @classmethod

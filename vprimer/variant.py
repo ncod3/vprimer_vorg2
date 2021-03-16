@@ -162,7 +162,7 @@ class Variant(object):
         #alt_list = [alt.value for alt in record.ALT]
         #line += [",".join(alt_list)]
         line = list()
-        line += [AlleleSelect.allele_int("{}/{}".format(
+        line += [AlleleSelect.allele_convert("{}/{}".format(
             record.call_for_sample[fn].gt_alleles[0],
             record.call_for_sample[fn].gt_alleles[1]
             ), "int") for fn in sample_fullname_list]
@@ -178,7 +178,7 @@ class Variant(object):
         #alt_list = [alt.value for alt in record.ALT]
         #line += [",".join(alt_list)]
         line = list()
-        line += [AlleleSelect.allele_int("{}/{}".format(
+        line += [AlleleSelect.allele_convert("{}/{}".format(
             record.call_for_sample[fn].gt_alleles[0],
             record.call_for_sample[fn].gt_alleles[1]
             ), "allele") for fn in sample_fullname_list]
@@ -270,6 +270,9 @@ class Variant(object):
 
         ''' When show_genotype is specified, the genotype of the specified
         regions and members are output to a file.
+            main
+            variant.py print_allele
+            allele_select.py cls allele_int
         '''
 
         proc_name = "genotype"
@@ -344,7 +347,7 @@ class Variant(object):
                     line += [record.REF]
                     line += [",".join(alt_list)]
 
-                    line += [AlleleSelect.allele_int(
+                    line += [AlleleSelect.allele_convert(
                         "{}/{}".format(
                             record.call_for_sample[fn].gt_alleles[0],
                             record.call_for_sample[fn].gt_alleles[1]
@@ -381,7 +384,7 @@ class Variant(object):
 #                 line = [record.CHROM, record.POS, record.REF]
 #                 alt_list = [alt.value for alt in record.ALT]
 #                 line += [",".join(alt_list)]
-#                 line += [AlleleSelect.allele_int("{}/{}".format(
+#                 line += [AlleleSelect.allele_convert("{}/{}".format(
 #                     record.call_for_sample[fn].gt_alleles[0],
 #                     record.call_for_sample[fn].gt_alleles[1]
 #                     )) for fn in glv.conf.vcf_sample_fullname_list]
@@ -417,7 +420,7 @@ class Variant(object):
 #                 line = [record.CHROM, record.POS, record.REF]
 #                 alt_list = [alt.value for alt in record.ALT]
 #                 line += [",".join(alt_list)]
-#                 line += [AlleleSelect.allele_int("{}/{}".format(
+#                 line += [AlleleSelect.allele_convert("{}/{}".format(
 #                     record.call_for_sample[fn].gt_alleles[0],
 #                     record.call_for_sample[fn].gt_alleles[1]
 #                     )) for fn in sample_fullname_list]

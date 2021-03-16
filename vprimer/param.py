@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # https://qiita.com/podhmo/items/1eb7e72a47b713c9cda2
 # https://qiita.com/kzkadc/items/e4fc7bc9c003de1eb6d0
+# description
+# https://qiita.com/mimitaro/items/a845b45df35b39a59c95
 
 import sys
 import os
@@ -55,7 +57,7 @@ class Param(object):
 
         #---------------------------------------------------------
         parser.add_argument('-g', '--show_genotype', action='store',
-            type=str, metavar='',
+            type=str, metavar='', default='no',
             help="show genotype for all variants")
 
         #---------------------------------------------------------

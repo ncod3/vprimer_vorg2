@@ -14,7 +14,10 @@ from vprimer.ref_fasta import RefFasta
 from vprimer.outlist import OutList
 
 # ---------------------------------------- #
+# for check
 pick_mode_list = ['all', 'indel', 'snp']
+show_genotype_list = ['gt', 'int', 'ab', 'no']
+
 
 ini_section = "[vprimer]"
 ini_version = "20210201"

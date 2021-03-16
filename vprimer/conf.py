@@ -469,10 +469,13 @@ class ConfBase(object):
         #pprint.pprint(self.conf_dict)
         # INI show_genotype
         self.show_genotype = self._value_choice('show_genotype')
-        if not self.show_genotype in ['no', 'str', 'int']:
+        if self.show_genotype == "":
+            self.show_genotype = "gt"
+
+        if not self.show_genotype in glv.show_genotype_list:
             err_mes = "show_genotype is selected from one of "
-            err_mes += "'no', 'str', 'int'."
-            log.error("{} exit.".format(err_mes))
+            err_mes += ", ".join(glv.show_genotype_list)
+            log.error("{}. exit.".format(err_mes))
             log.error("show_genotype={}".format(self.show_genotype))
             sys.exit(1)
 
@@ -499,8 +502,7 @@ class ConfBase(object):
         self.use_joblib_threading = self._value_choice('use_joblib_threading')
 
         if not self.use_joblib_threading in ['yes', 'no']:
-            err_mes = "use_joblib_threading is selected from one of "
-            err_mes = "show_genotype is either yes or no."
+            err_mes = "use_joblib_threading Choose from Yes or No."
             log.error("{} exit.".format(err_mes))
             log.error("use_joblib_threading={}".format(
                 self.use_joblib_threading))

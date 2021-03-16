@@ -79,10 +79,10 @@ $ git clone https://github.com/ncod3/data_vprimer
 $ mv data_vprimer/ini* .
 
 If you use minimum cpu 2, it will take only about 5 minutes.
-$ vprimer -c ini_vprimer_yam_exam15.ini -t 2
+$ vprimer -i ini_vprimer_yam_exam15.ini -t 2
 
 If you can use more cpu, for example 10, it will take only about 2 minutes.
-$ vprimer -c ini_vprimer_yam_exam15.ini -t 10
+$ vprimer -i ini_vprimer_yam_exam15.ini -t 10
 ~~~
 
 ## Usage
